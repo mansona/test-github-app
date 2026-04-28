@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: ci-planning-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo `date` >> time.txt
+      - uses: peter-evans/create-pull-request@v8
+        with:
+          commit-message: "Pretend to do some stuff"
+          labels: "internal"
+          branch: test-preview
+          title: testing pull requests
+          body: |
+            Let's see if CI runs on this PR then!
