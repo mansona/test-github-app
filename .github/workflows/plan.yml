@@ -23,4 +23,4 @@ jobs:
           branch: test-preview
           title: testing pull requests
           body: |
-            Let's see if CI runs on this PR then!
+            Let us see if CI runs on this PR then!
