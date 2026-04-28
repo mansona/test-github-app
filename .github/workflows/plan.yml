@@ -13,9 +13,18 @@ concurrency:
 jobs:
   hello:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Get OIDC token and call edge function
+        run: |
+          TOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=release-plan-token" | jq -r .value)
+          curl -H "Authorization: Bearer $TOKEN" https://release-plan-token.netlify.app/token
+
       - run: echo `date` >> time.txt
       - uses: peter-evans/create-pull-request@v8
         with:
